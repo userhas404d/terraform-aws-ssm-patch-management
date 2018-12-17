@@ -82,6 +82,12 @@ variable "maintenance_window_cutoff" {
   default     = "1"
 }
 
+variable "create_scan_patch_group" {
+  description = "Variable used to conditionally create scan patch groups"
+  type        = "string"
+  default     = true
+}
+
 variable "scan_patch_groups" {
   description = "The list of scan patching groups, one target will be created per entry in this list"
   type        = "list"

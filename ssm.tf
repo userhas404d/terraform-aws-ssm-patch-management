@@ -37,6 +37,7 @@ resource "aws_ssm_patch_group" "install_patchgroup" {
 }
 
 resource "aws_ssm_maintenance_window" "scan_window" {
+  count    = "${var.create_scan_patch_group == true ? length(var.scan_patch_groups) : 0}"
   name     = "${var.name}-${var.envname}-patch-maintenance-scan-mw"
   schedule = "${var.scan_maintenance_window_schedule}"
   duration = "${var.maintenance_window_duration}"
@@ -51,7 +52,7 @@ resource "aws_ssm_maintenance_window" "install_window" {
 }
 
 resource "aws_ssm_maintenance_window_target" "target_scan" {
-  count         = "${length(var.scan_patch_groups)}"
+  count         = "${var.create_scan_patch_group == true ? length(var.scan_patch_groups) : 0}"
   window_id     = "${aws_ssm_maintenance_window.scan_window.id}"
   resource_type = "INSTANCE"
 
@@ -62,6 +63,7 @@ resource "aws_ssm_maintenance_window_target" "target_scan" {
 }
 
 resource "aws_ssm_maintenance_window_task" "task_scan_patches" {
+  count            = "${var.create_scan_patch_group == true ? 1 : 0}"
   name             = "${var.name}-${var.envname}-scan-patches"
   description      = "${var.profile} scan patches task"
   window_id        = "${aws_ssm_maintenance_window.scan_window.id}"
