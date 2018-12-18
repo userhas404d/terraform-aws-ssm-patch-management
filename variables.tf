@@ -4,14 +4,10 @@ variable "name" {
   type        = "string"
 }
 
-variable "envname" {
-  description = "This label will be added after 'name' on all resources, and be added as the value for the 'Environment' tag where supported"
-  type        = "string"
-}
-
-variable "envtype" {
-  description = "This label will be added after 'envname' on all resources, and be added as the value for the 'Envtype' tag where supported"
-  type        = "string"
+variable "tags" {
+  default     = {}
+  description = "Map of tags to be added to resources that suport tagging."
+  type        = "map"
 }
 
 variable "profile" {

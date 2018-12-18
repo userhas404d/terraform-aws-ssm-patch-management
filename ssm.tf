@@ -1,5 +1,5 @@
 resource "aws_ssm_patch_baseline" "baseline" {
-  name             = "${var.name}-${var.envname}-${var.envtype}-patch-baseline"
+  name             = "${var.name}-patch-baseline"
   description      = "${var.profile} patch baseline"
   approved_patches = ["${var.approved_patches}"]
   rejected_patches = ["${var.rejected_patches}"]
@@ -38,14 +38,14 @@ resource "aws_ssm_patch_group" "install_patchgroup" {
 
 resource "aws_ssm_maintenance_window" "scan_window" {
   count    = "${var.create_scan_patch_group == true ? length(var.scan_patch_groups) : 0}"
-  name     = "${var.name}-${var.envname}-patch-maintenance-scan-mw"
+  name     = "${var.name}-patch-maintenance-scan-mw"
   schedule = "${var.scan_maintenance_window_schedule}"
   duration = "${var.maintenance_window_duration}"
   cutoff   = "${var.maintenance_window_cutoff}"
 }
 
 resource "aws_ssm_maintenance_window" "install_window" {
-  name     = "${var.name}-${var.envname}-patch-maintenance-install-mw"
+  name     = "${var.name}-patch-maintenance-install-mw"
   schedule = "${var.install_maintenance_window_schedule}"
   duration = "${var.maintenance_window_duration}"
   cutoff   = "${var.maintenance_window_cutoff}"
@@ -64,7 +64,7 @@ resource "aws_ssm_maintenance_window_target" "target_scan" {
 
 resource "aws_ssm_maintenance_window_task" "task_scan_patches" {
   count            = "${var.create_scan_patch_group == true ? 1 : 0}"
-  name             = "${var.name}-${var.envname}-scan-patches"
+  name             = "${var.name}-scan-patches"
   description      = "${var.profile} scan patches task"
   window_id        = "${aws_ssm_maintenance_window.scan_window.id}"
   task_type        = "RUN_COMMAND"
@@ -101,7 +101,7 @@ resource "aws_ssm_maintenance_window_target" "target_install" {
 }
 
 resource "aws_ssm_maintenance_window_task" "task_install_patches" {
-  name             = "${var.name}-${var.envname}-install-patches"
+  name             = "${var.name}-install-patches"
   description      = "${var.profile} install patches task"
   window_id        = "${aws_ssm_maintenance_window.install_window.id}"
   task_type        = "RUN_COMMAND"
