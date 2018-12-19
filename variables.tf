@@ -87,7 +87,7 @@ variable "create_scan_patch_group" {
 variable "scan_patch_groups" {
   description = "The list of scan patching groups, one target will be created per entry in this list"
   type        = "list"
-  default     = ["static", "disposable"]
+  default     = []
 }
 
 variable "install_patch_groups" {
