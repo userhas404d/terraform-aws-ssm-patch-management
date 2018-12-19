@@ -26,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "role_attach_ssm_mw" {
 
 # Create the iam role for ssm with permissions to do sts assumeRole only.
 resource "aws_iam_role" "role" {
-  name               = "terraform_ssm_role"
+  name               = "${var.name}-ssm-ec2-update"
   path               = "/system/"
   assume_role_policy = "${data.aws_iam_policy_document.instance-assume-role-policy.json}"
 }
@@ -39,6 +39,6 @@ resource "aws_iam_role_policy_attachment" "ssm-attach" {
 
 # Create the profile for ec2 instances linked to the ssm role above.
 resource "aws_iam_instance_profile" "ssm_profile" {
-  name = "terraform_ssm_profile"
+  name = "${var.name}-ssm-instance-profile"
   role = "${aws_iam_role.role.name}"
 }
